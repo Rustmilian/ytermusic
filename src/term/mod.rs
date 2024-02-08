@@ -5,8 +5,8 @@ pub mod music_player;
 pub mod playlist;
 pub mod playlist_view;
 pub mod search;
-pub mod vertical_gauge;
 pub mod styles;
+pub mod vertical_gauge;
 
 use std::{
     io::{self},

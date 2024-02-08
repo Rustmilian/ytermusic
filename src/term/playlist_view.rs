@@ -6,7 +6,13 @@ use ytpapi2::YoutubeMusicVideoRef;
 use crate::{consts::CONFIG, structures::sound_action::SoundAction, utils::invert, DATABASE};
 
 use super::{
-    item_list::{ListItem, ListItemAction}, styles::{STYLE_PLAYLIST_ITEM_CURRENT_DOWNLOADING, STYLE_PLAYLIST_ITEM_DOWNLOADING, STYLE_PLAYLIST_ITEM_LOCAL, STYLE_PLAYLIST_ITEM_SELECTED_DOWNLOADING, STYLE_PLAYLIST_ITEM_SELECTED_LOCAL}, EventResponse, ManagerMessage, Screen, Screens
+    item_list::{ListItem, ListItemAction},
+    styles::{
+        STYLE_PLAYLIST_ITEM_CURRENT_DOWNLOADING, STYLE_PLAYLIST_ITEM_DOWNLOADING,
+        STYLE_PLAYLIST_ITEM_LOCAL, STYLE_PLAYLIST_ITEM_SELECTED_DOWNLOADING,
+        STYLE_PLAYLIST_ITEM_SELECTED_LOCAL,
+    },
+    EventResponse, ManagerMessage, Screen, Screens,
 };
 
 #[derive(Clone)]

@@ -14,7 +14,13 @@ use crate::{
 };
 
 use super::{
-    item_list::{ListItem, ListItemAction}, styles::{STYLE_PLAYLIST_LIST_ITEM, STYLE_PLAYLIST_LIST_ITEM_LAST, STYLE_PLAYLIST_LIST_ITEM_LAST_SELECTED, STYLE_PLAYLIST_LIST_ITEM_LOCAL, STYLE_PLAYLIST_LIST_ITEM_LOCAL_SELECTED, STYLE_PLAYLIST_LIST_ITEM_SELECTED}, EventResponse, ManagerMessage, Screen, Screens
+    item_list::{ListItem, ListItemAction},
+    styles::{
+        STYLE_PLAYLIST_LIST_ITEM, STYLE_PLAYLIST_LIST_ITEM_LAST,
+        STYLE_PLAYLIST_LIST_ITEM_LAST_SELECTED, STYLE_PLAYLIST_LIST_ITEM_LOCAL,
+        STYLE_PLAYLIST_LIST_ITEM_LOCAL_SELECTED, STYLE_PLAYLIST_LIST_ITEM_SELECTED,
+    },
+    EventResponse, ManagerMessage, Screen, Screens,
 };
 
 #[derive(Clone)]
@@ -33,7 +39,7 @@ impl ListItemAction for ChooserAction {
             } else {
                 *STYLE_PLAYLIST_LIST_ITEM_LOCAL
             }
-        } else if name.contains("Last playlist"){
+        } else if name.contains("Last playlist") {
             if selected {
                 *STYLE_PLAYLIST_LIST_ITEM_LAST_SELECTED
             } else {
