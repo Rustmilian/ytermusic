@@ -6,8 +6,7 @@ use ytpapi2::YoutubeMusicVideoRef;
 use crate::{consts::CONFIG, structures::sound_action::SoundAction, utils::invert, DATABASE};
 
 use super::{
-    item_list::{ListItem, ListItemAction},
-    EventResponse, ManagerMessage, Screen, Screens,
+    item_list::{ListItem, ListItemAction}, styles::{STYLE_PLAYLIST_ITEM_CURRENT_DOWNLOADING, STYLE_PLAYLIST_ITEM_DOWNLOADING, STYLE_PLAYLIST_ITEM_LOCAL, STYLE_PLAYLIST_ITEM_SELECTED_DOWNLOADING, STYLE_PLAYLIST_ITEM_SELECTED_LOCAL}, EventResponse, ManagerMessage, Screen, Screens
 };
 
 #[derive(Clone)]
@@ -17,14 +16,14 @@ impl ListItemAction for PlayListAction {
     fn render_style(&self, _: &str, selected: bool) -> Style {
         if selected {
             if self.1 {
-                invert(CONFIG.player.text_downloading_style)
+                *STYLE_PLAYLIST_ITEM_SELECTED_DOWNLOADING
             } else {
-                invert(CONFIG.player.text_next_style)
+                *STYLE_PLAYLIST_ITEM_SELECTED_LOCAL
             }
         } else if self.1 {
-            CONFIG.player.text_downloading_style
+            *STYLE_PLAYLIST_ITEM_DOWNLOADING
         } else {
-            CONFIG.player.text_next_style
+            *STYLE_PLAYLIST_ITEM_LOCAL
         }
     }
 }

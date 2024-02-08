@@ -1,15 +1,17 @@
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers, MouseEventKind};
 
+use cssparser::get_style;
+use once_cell::sync::Lazy;
 use rand::seq::SliceRandom;
-use ratatui::widgets::{Block, Borders, Gauge};
+use ratatui::{
+    style::Style,
+    widgets::{Block, Borders, Gauge},
+};
 
 use crate::{
     consts::CONFIG,
     errors::handle_error,
-    structures::{
-        app_status::{AppStatus, MusicDownloadStatus},
-        sound_action::SoundAction,
-    },
+    structures::{app_status::MusicDownloadStatus, sound_action::SoundAction},
     systems::{
         download::DOWNLOAD_LIST,
         player::{generate_music, PlayerAction, PlayerState},
@@ -195,19 +197,39 @@ impl Screen for PlayerState {
         let render_volume_slider = CONFIG.player.volume_slider;
         let [top_rect, progress_rect] = split_y(f.size(), 3);
         let [list_rect, volume_rect] = split_x(top_rect, if render_volume_slider { 10 } else { 0 });
-        let colors = if self.sink.is_paused() {
-            AppStatus::Paused
-        } else if self.sink.is_finished() {
-            AppStatus::NoMusic
-        } else {
-            AppStatus::Playing
-        }
-        .style();
+        let (playbar_progress, volume_progress, volume_title, playbar_title) =
+            if self.sink.is_paused() {
+                (
+                    *STYLE_PLAYBAR_PROGRESS_PAUSED,
+                    *STYLE_VOLUME_PROGRESS_PAUSED,
+                    *STYLE_VOLUME_TITLE_PAUSED,
+                    *STYLE_PLAYBAR_TEXT_PAUSED,
+                )
+            } else if self.sink.is_finished() {
+                (
+                    *STYLE_PLAYBAR_PROGRESS_NO_MUSIC,
+                    *STYLE_VOLUME_PROGRESS_NO_MUSIC,
+                    *STYLE_VOLUME_TITLE_NO_MUSIC,
+                    *STYLE_PLAYBAR_TEXT_NO_MUSIC,
+                )
+            } else {
+                (
+                    *STYLE_PLAYBAR_PROGRESS_PLAYING,
+                    *STYLE_VOLUME_PROGRESS_PLAYING,
+                    *STYLE_VOLUME_TITLE_PLAYING,
+                    *STYLE_PLAYBAR_TEXT_PLAYING,
+                )
+            };
         if render_volume_slider {
             f.render_widget(
                 VerticalGauge::default()
-                    .block(Block::default().title(" Volume ").borders(Borders::ALL))
-                    .gauge_style(colors)
+                    .gauge_style(volume_progress)
+                    .block(
+                        Block::default()
+                            .title(" Volume ")
+                            .borders(Borders::ALL)
+                            .style(volume_title),
+                    )
                     .ratio((self.sink.volume() as f64 / 100.).clamp(0.0, 1.0)),
                 volume_rect,
             );
@@ -224,9 +246,10 @@ impl Screen for PlayerState {
                                 .map(|x| format!(" {x} "))
                                 .unwrap_or_else(|| " No music playing ".to_owned()),
                         )
-                        .borders(Borders::ALL),
+                        .borders(Borders::ALL)
+                        .style(playbar_title),
                 )
-                .gauge_style(colors)
+                .gauge_style(playbar_progress)
                 .ratio(
                     if self.sink.is_finished() {
                         0.5
@@ -278,3 +301,31 @@ impl Screen for PlayerState {
         EventResponse::None
     }
 }
+
+static STYLE_PLAYBAR_PROGRESS_PLAYING: Lazy<Style> =
+    Lazy::new(|| get_style("playbar-progress", &["playing", "slider", "playbar"]));
+static STYLE_PLAYBAR_PROGRESS_PAUSED: Lazy<Style> =
+    Lazy::new(|| get_style("playbar-progress", &["paused", "slider", "playbar"]));
+static STYLE_PLAYBAR_PROGRESS_NO_MUSIC: Lazy<Style> =
+    Lazy::new(|| get_style("playbar-progress", &["no-music", "slider", "playbar"]));
+
+static STYLE_PLAYBAR_TEXT_PLAYING: Lazy<Style> =
+    Lazy::new(|| get_style("playbar-text", &["playing", "text", "playbar"]));
+static STYLE_PLAYBAR_TEXT_PAUSED: Lazy<Style> =
+    Lazy::new(|| get_style("playbar-text", &["paused", "text", "playbar"]));
+static STYLE_PLAYBAR_TEXT_NO_MUSIC: Lazy<Style> =
+    Lazy::new(|| get_style("playbar-text", &["no-music", "text", "playbar"]));
+
+static STYLE_VOLUME_PROGRESS_PLAYING: Lazy<Style> =
+    Lazy::new(|| get_style("volume-progress", &["playing", "slider", "volume"]));
+static STYLE_VOLUME_PROGRESS_PAUSED: Lazy<Style> =
+    Lazy::new(|| get_style("volume-progress", &["paused", "slider", "volume"]));
+static STYLE_VOLUME_PROGRESS_NO_MUSIC: Lazy<Style> =
+    Lazy::new(|| get_style("volume-progress", &["no-music", "slider", "volume"]));
+
+static STYLE_VOLUME_TITLE_PLAYING: Lazy<Style> =
+    Lazy::new(|| get_style("volume-title", &["playing", "title", "volume"]));
+static STYLE_VOLUME_TITLE_PAUSED: Lazy<Style> =
+    Lazy::new(|| get_style("volume-title", &["paused", "title", "volume"]));
+static STYLE_VOLUME_TITLE_NO_MUSIC: Lazy<Style> =
+    Lazy::new(|| get_style("volume-title", &["no-music", "title", "volume"]));

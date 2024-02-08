@@ -1,0 +1,20 @@
+playbar-title {
+    fg: white;
+}
+playbar-progress {
+    fg: black;
+    bg: white;
+}
+playbar-progress.progress {
+    fg: white;
+    bg: black;
+}
+.playing {
+    fg: green;
+}
+.paused {
+    fg: yellow;
+}
+.error {
+    fg: red;
+}

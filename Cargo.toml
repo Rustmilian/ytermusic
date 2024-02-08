@@ -17,6 +17,9 @@ rusty_ytdl = { git = "https://github.com/Mithronn/rusty_ytdl/", branch = "main" 
 
 ytpapi2 = { path = "./ytpapi2" }
 
+# --- CSS ---
+cssparser = { path = "cssparser" }
+
 #  --- Threading & Sync ---
 flume = "0.11.0"
 once_cell = "1.10.0"

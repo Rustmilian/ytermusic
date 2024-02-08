@@ -1,0 +1,36 @@
+playbar-title {
+    fg: white;
+}
+playbar-progress {
+    fg: white;
+}
+volume-title {
+    fg: white;
+}
+volume-progress {
+    fg: white;
+}
+.playing {
+    fg: #1aa1b0;
+}
+.paused {
+    fg: yellow;
+}
+.error {
+    fg: red;
+}
+.text {
+    add-modifier: bold;
+}
+playbar-progress {
+    remove-modifier: bold;
+}
+
+playlist-list {
+    fg: white;
+}
+playlist-list.selected {
+    fg: black;
+    bg: white;
+}
+

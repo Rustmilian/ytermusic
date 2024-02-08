@@ -14,8 +14,7 @@ use crate::{
 };
 
 use super::{
-    item_list::{ListItem, ListItemAction},
-    EventResponse, ManagerMessage, Screen, Screens,
+    item_list::{ListItem, ListItemAction}, styles::{STYLE_PLAYLIST_LIST_ITEM, STYLE_PLAYLIST_LIST_ITEM_LAST, STYLE_PLAYLIST_LIST_ITEM_LAST_SELECTED, STYLE_PLAYLIST_LIST_ITEM_LOCAL, STYLE_PLAYLIST_LIST_ITEM_LOCAL_SELECTED, STYLE_PLAYLIST_LIST_ITEM_SELECTED}, EventResponse, ManagerMessage, Screen, Screens
 };
 
 #[derive(Clone)]
@@ -25,10 +24,27 @@ pub enum ChooserAction {
 
 impl ListItemAction for ChooserAction {
     fn render_style(&self, _: &str, selected: bool) -> Style {
-        if selected {
-            Style::default().fg(Color::Black).bg(Color::White)
+        let name = match self {
+            ChooserAction::Play(a) => &a.name,
+        };
+        if name == "Local musics" {
+            if selected {
+                *STYLE_PLAYLIST_LIST_ITEM_LOCAL_SELECTED
+            } else {
+                *STYLE_PLAYLIST_LIST_ITEM_LOCAL
+            }
+        } else if name.contains("Last playlist"){
+            if selected {
+                *STYLE_PLAYLIST_LIST_ITEM_LAST_SELECTED
+            } else {
+                *STYLE_PLAYLIST_LIST_ITEM_LAST
+            }
         } else {
-            Style::default().fg(Color::White).bg(Color::Black)
+            if selected {
+                *STYLE_PLAYLIST_LIST_ITEM_SELECTED
+            } else {
+                *STYLE_PLAYLIST_LIST_ITEM
+            }
         }
     }
 }

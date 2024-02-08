@@ -1,4 +1,5 @@
 use consts::CACHE_DIR;
+use cssparser::add_stylesheet;
 use flume::{Receiver, Sender};
 use log::error;
 use once_cell::sync::Lazy;
@@ -58,6 +59,7 @@ async fn main() {
         error!("{e}");
         shutdown();
     }));
+    add_stylesheet("base.css");
     select! {
         _ = async {
             app_start().await
